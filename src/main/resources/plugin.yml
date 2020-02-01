@@ -1,0 +1,7 @@
+name: Coords
+main: com.greeny.Coords.Coords
+version: 1.0
+commands:
+   coords:
+      description: Prints out a player's coordinates.
+      usage: /coords
