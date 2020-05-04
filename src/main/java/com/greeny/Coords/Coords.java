@@ -1,6 +1,7 @@
 package com.greeny.Coords;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -16,9 +17,7 @@ public class Coords extends JavaPlugin {
 			if (cmd.getName().equalsIgnoreCase("coords") && args.length == 1) {
 				final Player player = Bukkit.getPlayer(args[0]);
 				if (Bukkit.getOnlinePlayers().contains(player)) {
-					final Location location = player.getLocation();
-					sender.sendMessage(player.getName() + "'s coords. X: " + location.getBlockX() + ", Y: "
-							+ location.getBlockY() + ", Z: " + location.getBlockZ() + " in " + getEnvironmentNameFor(player));
+					sender.sendMessage(constructCoordsMessageFor(player));
 					return true;
 				} else {
 					sender.sendMessage("No player with username is on the server.");
@@ -33,16 +32,13 @@ public class Coords extends JavaPlugin {
 				// Player didn't specify a username, broadcast their own coordinates.
 				if (args.length == 0) {
 					final Player player = (Player) sender;
-					final Location location = player.getLocation();
-					Bukkit.broadcastMessage(player.getName() + "'s coords. X: " + location.getBlockX() + ", Y: "
-							+ location.getBlockY() + ", Z: " + location.getBlockZ());
+					Bukkit.broadcastMessage(constructCoordsMessageFor(player));
 					return true;
 
 				} else if (args.length == 1) {
 					final Player player = Bukkit.getPlayer(args[0]);
 					if (Bukkit.getOnlinePlayers().contains(player)) {
-						final Location location = player.getLocation();
-						sender.sendMessage(player.getName() + "'s coords. X: " + location.getBlockX() + ", Y: " + location.getBlockY() + ", Z: " + location.getBlockZ());
+						sender.sendMessage(constructCoordsMessageFor(player));
 						return true;
 					} else {
 						sender.sendMessage("No player with username is on the server.");
@@ -58,17 +54,25 @@ public class Coords extends JavaPlugin {
 		Environment environment = player.getWorld().getEnvironment();
 
 		if (environment == World.Environment.NORMAL) {
-			return "The Overworld";
+			return "the " + ChatColor.GREEN + "Overworld";
 		}
 
 		if (environment == World.Environment.NETHER) {
-			return "The Nether";
+			return "the " + ChatColor.RED + "Nether";
 		}
 
 		if (environment == World.Environment.THE_END) {
-			return "The End";
+			return ChatColor.DARK_PURPLE + "The End";
 		}
 
 		return "Unknown Dimension";
+	}
+
+	private String constructCoordsMessageFor(Player player) {
+		final Location location = player.getLocation();
+		final String message = ChatColor.GOLD + player.getName() + ChatColor.RESET + "'s coords, X: " + location.getBlockX() + ", Y: "
+		+ location.getBlockY() + ", Z: " + location.getBlockZ() + " in " + getEnvironmentNameFor(player);
+
+		return message;
 	}
 }
