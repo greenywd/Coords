@@ -2,9 +2,11 @@ package com.greeny.Coords;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.World.Environment;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Coords extends JavaPlugin {
@@ -16,7 +18,7 @@ public class Coords extends JavaPlugin {
 				if (Bukkit.getOnlinePlayers().contains(player)) {
 					final Location location = player.getLocation();
 					sender.sendMessage(player.getName() + "'s coords. X: " + location.getBlockX() + ", Y: "
-							+ location.getBlockY() + ", Z: " + location.getBlockZ());
+							+ location.getBlockY() + ", Z: " + location.getBlockZ() + " in " + getEnvironmentNameFor(player));
 					return true;
 				} else {
 					sender.sendMessage("No player with username is on the server.");
@@ -50,5 +52,23 @@ public class Coords extends JavaPlugin {
 			}
 		}
 		return false; 
+	}
+
+	private String getEnvironmentNameFor(Player player) {
+		Environment environment = player.getWorld().getEnvironment();
+
+		if (environment == World.Environment.NORMAL) {
+			return "The Overworld";
+		}
+
+		if (environment == World.Environment.NETHER) {
+			return "The Nether";
+		}
+
+		if (environment == World.Environment.THE_END) {
+			return "The End";
+		}
+
+		return "Unknown Dimension";
 	}
 }
